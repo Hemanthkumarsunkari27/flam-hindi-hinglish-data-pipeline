@@ -1,0 +1,93 @@
+{
+    "project": "Flam Indic Training Corpus",
+    "created_date": "2026-11-23",
+    "sources": [
+        {
+            "name": "COMI-LINGUA",
+            "filename": "LID_train.csv",
+            "size_bytes": 123492954,
+            "sha256": "d17e256c92604bbadd4fcbcc7e82035985349551f9889e39afabbde8be8bc85f",
+            "download_date_utc": "2026-11-23T13:50:42.526459+00:00",
+            "license": "CC BY 4.0",
+            "url": "https://huggingface.co/datasets/LingoIITGN/COMI-LINGUA"
+        },
+        {
+            "name": "HinGE",
+            "filename": "HinGE.csv",
+            "size_bytes": 1591630,
+            "sha256": "dcfaf37ca9d7528e27da7be6b0cfffafb8bbe7825fe4da45077b96236cd9c9c3",
+            "download_date_utc": "2026-11-23T13:50:43.475579+00:00",
+            "license": "CC BY 4.0",
+            "url": "https://huggingface.co/datasets/LingoIITGN/HinGE"
+        }
+    ],
+    "processing": {
+        "normalization": "Unicode NFC, invisible character cleanup and whitespace normalization",
+        "language_labels": [
+            "hi",
+            "hi-Latn",
+            "en",
+            "other"
+        ],
+        "language_identification": "Rule-based heuristic; labels are not manually validated",
+        "quality_filtering": "Encoding, markup, control-character and excessive-character checks",
+        "pii_redaction": [
+            "PHONE",
+            "EMAIL",
+            "AADHAAR",
+            "PAN"
+        ],
+        "exact_deduplication": "Exact text matching after PII redaction",
+        "near_duplicate_method": "Character TF-IDF, 3-5 character n-grams",
+        "near_duplicate_threshold": 0.9,
+        "evaluation_random_seed": 42,
+        "evaluation_size": 200,
+        "confirmed_near_copy_leaks_removed": 4,
+        "cross_script_method": "Indic transliteration and character TF-IDF",
+        "cross_script_threshold": 0.7,
+        "cross_script_candidates": 0
+    },
+    "final_counts": {
+        "training_documents": 34605,
+        "evaluation_documents": 200,
+        "ledger_documents": 35286,
+        "contamination_records": 4,
+        "ledger_statuses": {
+            "kept": 34605,
+            "dropped": 681
+        },
+        "ledger_stages": {
+            "final_dataset": 34605,
+            "evaluation_holdout": 200,
+            "quality_filter": 464,
+            "evaluation_contamination": 4,
+            "exact_deduplication": 13
+        },
+        "training_language_distribution": {
+            "hi": 22056,
+            "hi-Latn": 8639,
+            "en": 3910
+        }
+    },
+    "outputs": {
+        "training_dataset": {
+            "path": "output/clean/training.jsonl.gz",
+            "size_bytes": 2417049,
+            "sha256": "a7f7dff7d31d436a59b8e579e25d09e1aa738a0188be3a8cb310b854611d7542"
+        },
+        "evaluation_set": {
+            "path": "output/eval.jsonl",
+            "size_bytes": 57838,
+            "sha256": "ad0490729df28b647c70dd7a5a58ab2950bacadaa23f04efe70ade0657f32ae6"
+        },
+        "consolidated_ledger": {
+            "path": "output/ledger.jsonl",
+            "size_bytes": 4155685,
+            "sha256": "3048792c9fee52bfd7d757a69217f495daaf41a8554ef2763d2e2fbedc3544b9"
+        },
+        "contamination_report": {
+            "path": "output/contamination.jsonl",
+            "records": 4
+        }
+    }
+}

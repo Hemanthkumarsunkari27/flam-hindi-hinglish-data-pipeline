@@ -1,0 +1,20 @@
+venv/
+__pycache__/
+*.pyc
+.env
+
+# Raw and intermediate datasets
+data/
+
+# Temporary test outputs
+test_output/
+
+# Keep only required submission artifacts
+output/*
+!output/eval.jsonl
+!output/contamination.jsonl
+!output/manifest.json
+!output/ledger.jsonl
+!output/clean/
+output/clean/*
+!output/clean/sample_1000.jsonl
