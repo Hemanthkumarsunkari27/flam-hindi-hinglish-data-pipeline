@@ -1,34 +1,53 @@
-
 import json
 from pathlib import Path
 
 TRAIN_FILE = Path("data/eval/training_pool.jsonl")
+REVIEW_FILE = Path(__file__).resolve().parent / "leak_review.jsonl"
 OUTPUT_FILE = Path("data/eval/training_pool_leak_free.jsonl")
 
-# Four manually confirmed near-copy training documents.
-LEAK_IDS = {
-    "COMI_015962",
-    "COMI_005888",
-    "COMI_009985",
-    "COMI_010125"
-}
 
-kept = 0
-removed = 0
+def main():
+    decisions = {}
 
-with TRAIN_FILE.open("r", encoding="utf-8") as source:
-    with OUTPUT_FILE.open("w", encoding="utf-8") as output:
-        for line in source:
-            record = json.loads(line)
+    with REVIEW_FILE.open(encoding="utf-8-sig") as file:
+        for line in file:
+            if line.strip():
+                review = json.loads(line)
+                decisions[review["train_id"]] = review["decision"]
 
-            if record["id"] in LEAK_IDS:
-                removed += 1
-                continue
+    seen = set()
+    kept = 0
+    removed = 0
 
-            output.write(json.dumps(record, ensure_ascii=False) + "\n")
-            kept += 1
+    with TRAIN_FILE.open(encoding="utf-8-sig") as source:
+        with OUTPUT_FILE.open("w", encoding="utf-8") as output:
+            for line in source:
+                if not line.strip():
+                    continue
 
-print("Leak removal completed!")
-print("Training documents removed:", removed)
-print("Training documents retained:", kept)
-print("Final training pool:", OUTPUT_FILE)
+                record = json.loads(line)
+                doc_id = record["id"]
+
+                if doc_id in seen:
+                    raise ValueError(f"Duplicate ID: {doc_id}")
+                seen.add(doc_id)
+
+                if decisions.get(doc_id) == "remove":
+                    removed += 1
+                    continue
+
+                output.write(json.dumps(record, ensure_ascii=False) + "\n")
+                kept += 1
+
+    missing = set(decisions) - seen
+    if missing:
+        OUTPUT_FILE.unlink(missing_ok=True)
+        raise ValueError(f"Reviewed IDs not found: {sorted(missing)}")
+
+    print("Leak removal completed!")
+    print("Removed:", removed)
+    print("Retained:", kept)
+
+
+if __name__ == "__main__":
+    main()
