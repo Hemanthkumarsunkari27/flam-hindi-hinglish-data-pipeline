@@ -59,3 +59,13 @@ The current in-memory TF-IDF comparison and pairwise similarity computation woul
 5. Improve scalability and checkpointing for large datasets.
 
 Actual time spent: approximately 4 hours 20 minutes.
+
+
+## 9. Final Testing and Limitations
+
+- **Pipeline test:** Successfully ran all 17 stages using Git Bash with the project virtual environment activated.
+- **Restart test:** Interrupted the pipeline during Stage 4 and reran it from the beginning. The final uncompressed training data matched the original output's SHA-256 hash.
+- **Unseen content test:** Tested extraction with 3 new Hindi records and 2 new Hinglish records using the same CSV structure. All 5 records were extracted successfully, with 0 skipped rows.
+- **Format limitation:** The current extractor supports the two source CSV formats and their expected column names. Other formats require an extraction adapter.
+- **Restart limitation:** The pipeline safely restarts from the beginning after interruption; it does not resume from the last completed stage.
+- **Scalability limitation:** Near-duplicate detection and evaluation splitting currently use in-memory processing. These stages need improvement for very large datasets.
